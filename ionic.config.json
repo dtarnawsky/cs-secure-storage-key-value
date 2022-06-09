@@ -1,0 +1,7 @@
+{
+  "name": "secure-storage-kv",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
