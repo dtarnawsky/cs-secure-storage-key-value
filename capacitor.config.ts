@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
-  appName: 'secure-storage-kv',
+  appName: 'star-wars',
   webDir: 'www',
   bundledWebRuntime: false
 };
