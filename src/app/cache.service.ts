@@ -44,7 +44,12 @@ export class CacheService {
                 }
             }
             const subscription = observable.subscribe(async (value) => {
-                await this.cacheStorageProvider.writeValue(key, { created: Date.now(), value });
+                try {
+                    await this.cacheStorageProvider.writeValue(key, { created: Date.now(), value });
+                } catch (error) {
+                    console.error('CacheService.writeValue',error);
+                    // We want to continue even if we cannot store
+                }
                 if (!emitDuplicates && cachedValue) {
                     // If the fresh value is the same as the cached value then do not emit
                     if (JSON.stringify(cachedValue.value) === JSON.stringify(value)) {
