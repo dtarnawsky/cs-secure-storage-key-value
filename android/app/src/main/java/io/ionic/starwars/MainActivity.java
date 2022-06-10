@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package io.ionic.starwars;
 
 import com.getcapacitor.BridgeActivity;
 

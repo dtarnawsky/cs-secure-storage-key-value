@@ -10,11 +10,11 @@ import { DataStorageService } from './data-storage.service';
   providedIn: 'root'
 })
 export class ApiService {
-  public strategy: CacheOptions = CacheStrategy.fresh;
+  public strategy: CacheOptions = CacheStrategy.oneDay;
 
 
   constructor(private httpClient: HttpClient, private dataStorage: DataStorageService, private cacheService: CacheService) {
-    this.cacheService.cacheStorageProvider = dataStorage;
+    this.cacheService.cacheStorageProvider = this.dataStorage;
   }
 
   public getPeople(id?: number): Observable<Person[]> {

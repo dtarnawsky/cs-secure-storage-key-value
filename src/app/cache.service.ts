@@ -22,7 +22,7 @@ export class CacheService {
 
             const cachedValue: CacheValue = await this.cacheStorageProvider.readValue(key);
 
-            if (cachedValue) {
+            if (cachedValue && cachedValue.value) {
                 const age = Date.now() - cachedValue.created;
                 const expiresMs = (options && options.expiresMs) ? options.expiresMs : Number.MAX_VALUE;
 
