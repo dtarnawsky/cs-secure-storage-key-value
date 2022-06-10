@@ -5,8 +5,6 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class CacheService {
-    private cache = {};
-    private cacheTime = {};
 
     public observe(
         key: string,
@@ -14,11 +12,13 @@ export class CacheService {
         options?: CacheOptions,
         storageProvider?: CacheStorageProvider
     ): Observable<any> {
+        const inMemory = new InMemoryStorageProvider();
         return Observable.create(async (observer) => {
             const emitDuplicates = (options) ? options.emitDuplicates : true;
             const alwaysGetValue = (options) ? options.alwaysGetValue : false;
-            const readFunction = (storageProvider?.readValue) ? storageProvider.readValue : this.readInMemoryCache;
-            const writeFunction = (storageProvider?.writeValue) ? storageProvider.writeValue : this.writeInMemoryCache;
+            const readFunction = (storageProvider?.readValue) ? storageProvider.readValue : inMemory.readInMemoryCache;
+            const writeFunction = (storageProvider?.writeValue) ? storageProvider.writeValue : inMemory.writeInMemoryCache;
+
             const cachedValue: CacheValue = await readFunction(key);
 
             if (cachedValue) {
@@ -59,20 +59,21 @@ export class CacheService {
         });
         ;
     }
+}
 
+export class InMemoryStorageProvider {
+    private static cache = {};
+    private static cacheTime = {};
 
-
-    private async readInMemoryCache(key: string): Promise<CacheValue> {
-        return Promise.resolve(this.cache[key]);
+    async readInMemoryCache(key: string): Promise<CacheValue> {
+        return Promise.resolve(InMemoryStorageProvider.cache[key]);
     }
 
-    private async writeInMemoryCache(key: string, data: CacheValue): Promise<void> {
-        this.cache[key] = data;
-        this.cacheTime[key] = Date.now();
+    async writeInMemoryCache(key: string, data: CacheValue): Promise<void> {
+        InMemoryStorageProvider.cache[key] = data;
+        InMemoryStorageProvider.cacheTime[key] = Date.now();
         Promise.resolve();
     };
-
-
 }
 
 export class CacheStrategy {
