@@ -6,11 +6,24 @@ import { Observable } from 'rxjs';
 })
 export class CacheService {
 
+    // By default the cache storage provider will be inMemory but this property
+    // allows you to override it if you want to store cached data elsewhere
     public cacheStorageProvider: CacheStorageProvider;
 
     constructor() {
         this.cacheStorageProvider = new InMemoryStorageProvider();
     }
+
+    /**
+     * This creates an observable that will emit cached or fresh value depending on `options`
+     * It takes an observable as a parameter (such as from `HttpClient`) which is will be used
+     * to obtain values.
+     *
+     * @param key - This is the unique name of what will be cached
+     * @param observable - This observable is used to obtain values that can be cached
+     * @param options? - This optional parameter defines how the data will be cached (see CacheOptions)
+     * @returns Observable
+     */
     public observe(
         key: string,
         observable: Observable<any>,
@@ -47,7 +60,7 @@ export class CacheService {
                 try {
                     await this.cacheStorageProvider.writeValue(key, { created: Date.now(), value });
                 } catch (error) {
-                    console.error('CacheService.writeValue',error);
+                    console.error('CacheService.writeValue', error);
                     // We want to continue even if we cannot store
                 }
                 if (!emitDuplicates && cachedValue) {
