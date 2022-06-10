@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CacheOptions, CacheService, CacheStrategy } from './cache.service';
 import { Person, Planet, Ship } from './models';
-import { map } from 'rxjs/operators';
+import { defaultIfEmpty, map } from 'rxjs/operators';
 import { DataStorageService } from './data-storage.service';
 
 @Injectable({
@@ -35,6 +35,6 @@ export class ApiService {
       `${entity}-${id}`,
       this.httpClient.get(url),
       this.strategy
-    ).pipe(map(val => val.results));
+    ).pipe(map(val => val.results), defaultIfEmpty(undefined));
   }
 }

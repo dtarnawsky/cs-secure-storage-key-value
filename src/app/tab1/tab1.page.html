@@ -14,6 +14,7 @@
   </ion-header>
 
   <ion-list>
+    <div class="dead-center" [hidden]="people$ | async"><ion-spinner></ion-spinner></div>
     <ion-item *ngFor="let person of people$ | async">
       {{person.name}}
     </ion-item>

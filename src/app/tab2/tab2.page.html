@@ -14,6 +14,7 @@
   </ion-header>
 
   <ion-list>
+    <div class="dead-center" [hidden]="planets$ | async"><ion-spinner></ion-spinner></div>
     <ion-item *ngFor="let planet of planets$ | async">
       {{planet.name}}
     </ion-item>
