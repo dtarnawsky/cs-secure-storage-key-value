@@ -4,6 +4,10 @@ The Secure Storage plugin has a Key Value storage API called [KeyValueStorage](h
 
 This sample application uses `KeyValueStorage` in a real world scenario where it is used to allow the app to work offline by storing API results when online and returning cached data stored on the device when offline.
 
-- [data-storage.service.ts](src/app/data-storage.service.ts) - This service reads and writes values using Secure Storage's `KeyValueStorage`
+- [data-storage.service.ts](src/app/data-storage.service.ts) - This service reads and writes values using Secure Storage's `KeyValueStorage`. It will also clear stored data if the wrong encryption key is used.
 - [cache.service.ts](src/app/cache.service.ts) - This service handles caching from observables from `HttpClient` emitting cached or fresh data.
-- [api.service.ts](src/app/api.service.ts) - This service handles requests to get data from the Star Wars API and uses `CacheService`
+- [api.service.ts](src/app/api.service.ts) - This service handles requests to get data from the Star Wars API and uses `CacheService`.
+
+### Note
+
+The sample application has its encrpytion key hardcoded in code. This is not secure and you should securely generate and store an encryption key using something like [Idenity Vault](https://ionic.io/docs/identity-vault) or obtain the encryption key via your backend.
