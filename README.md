@@ -10,4 +10,4 @@ This sample application uses `KeyValueStorage` in a real world scenario where it
 
 ### Note
 
-The sample application has its encrpytion key hardcoded in code. This is not secure and you should securely generate and store an encryption key using something like [Idenity Vault](https://ionic.io/docs/identity-vault) or obtain the encryption key via your backend.
+The sample application has its encrpytion key hardcoded in code. This is not secure and you should securely generate and store an encryption key using a plugin like [Idenity Vault](https://ionic.io/docs/identity-vault) or obtain the encryption key via your backend.
