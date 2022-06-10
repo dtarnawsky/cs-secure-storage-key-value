@@ -6,20 +6,21 @@ import { Observable } from 'rxjs';
 })
 export class CacheService {
 
+    public cacheStorageProvider: CacheStorageProvider;
+
+    constructor() {
+        this.cacheStorageProvider = new InMemoryStorageProvider();
+    }
     public observe(
         key: string,
         observable: Observable<any>,
-        options?: CacheOptions,
-        storageProvider?: CacheStorageProvider
+        options?: CacheOptions
     ): Observable<any> {
-        const inMemory = new InMemoryStorageProvider();
         return Observable.create(async (observer) => {
             const emitDuplicates = (options) ? options.emitDuplicates : true;
             const alwaysGetValue = (options) ? options.alwaysGetValue : false;
-            const readFunction = (storageProvider?.readValue) ? storageProvider.readValue : inMemory.readInMemoryCache;
-            const writeFunction = (storageProvider?.writeValue) ? storageProvider.writeValue : inMemory.writeInMemoryCache;
 
-            const cachedValue: CacheValue = await readFunction(key);
+            const cachedValue: CacheValue = await this.cacheStorageProvider.readValue(key);
 
             if (cachedValue) {
                 const age = Date.now() - cachedValue.created;
@@ -43,7 +44,7 @@ export class CacheService {
                 }
             }
             const subscription = observable.subscribe(async (value) => {
-                await writeFunction(key, { created: Date.now(), value });
+                await this.cacheStorageProvider.writeValue(key, { created: Date.now(), value });
                 if (!emitDuplicates && cachedValue) {
                     // If the fresh value is the same as the cached value then do not emit
                     if (JSON.stringify(cachedValue.value) === JSON.stringify(value)) {
@@ -61,15 +62,15 @@ export class CacheService {
     }
 }
 
-export class InMemoryStorageProvider {
+export class InMemoryStorageProvider implements CacheStorageProvider {
     private static cache = {};
     private static cacheTime = {};
 
-    async readInMemoryCache(key: string): Promise<CacheValue> {
+    async readValue(key: string): Promise<CacheValue> {
         return Promise.resolve(InMemoryStorageProvider.cache[key]);
     }
 
-    async writeInMemoryCache(key: string, data: CacheValue): Promise<void> {
+    async writeValue(key: string, data: CacheValue): Promise<void> {
         InMemoryStorageProvider.cache[key] = data;
         InMemoryStorageProvider.cacheTime[key] = Date.now();
         Promise.resolve();

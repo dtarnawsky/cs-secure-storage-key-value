@@ -7,6 +7,7 @@ import { Injectable } from '@angular/core';
   })
 export class DataStorageService implements CacheStorageProvider {
     constructor(private storage: KeyValueStorage) {
+        this.storage.create('super-secret-key-here');
     }
 
     public async readValue(key: string): Promise<CacheValue> {

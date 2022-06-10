@@ -14,6 +14,7 @@ export class ApiService {
 
 
   constructor(private httpClient: HttpClient, private dataStorage: DataStorageService, private cacheService: CacheService) {
+    this.cacheService.cacheStorageProvider = dataStorage;
   }
 
   public getPeople(id?: number): Observable<Person[]> {
@@ -33,8 +34,7 @@ export class ApiService {
     return this.cacheService.observe(
       `${entity}-${id}`,
       this.httpClient.get(url),
-      this.strategy,
-      //this.dataStorage
+      this.strategy
     ).pipe(map(val => val.results));
   }
 }
