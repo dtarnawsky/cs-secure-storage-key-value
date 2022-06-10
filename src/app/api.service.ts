@@ -10,7 +10,7 @@ import { DataStorageService } from './data-storage.service';
   providedIn: 'root'
 })
 export class ApiService {
-  public strategy: CacheOptions = CacheStrategy.oneDay;
+  public strategy: CacheOptions = CacheStrategy.fresh;
 
 
   constructor(private httpClient: HttpClient, private dataStorage: DataStorageService, private cacheService: CacheService) {
