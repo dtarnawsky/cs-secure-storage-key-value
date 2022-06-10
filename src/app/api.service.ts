@@ -34,7 +34,7 @@ export class ApiService {
       `${entity}-${id}`,
       this.httpClient.get(url),
       this.strategy,
-      this.dataStorage
+      //this.dataStorage
     ).pipe(map(val => val.results));
   }
 }
